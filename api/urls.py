@@ -1,7 +1,8 @@
 from django.urls import path
 
-from . import views
+from .endpoints import views, userprofiles
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('login', userprofiles.login, name='login'),
 ]
