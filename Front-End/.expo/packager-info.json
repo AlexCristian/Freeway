@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 13224,
+  "expoServerNgrokUrl": "https://t6-kra.anonymous.freeway.exp.direct",
+  "packagerNgrokUrl": "https://packager.t6-kra.anonymous.freeway.exp.direct",
+  "ngrokPid": 17892,
+  "webpackServerPort": 19006
+}
