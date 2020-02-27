@@ -1,40 +1,34 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import ValidationError
 from django.http import HttpResponse
 from api.models import User
+from api.common import *
 import bcrypt
-import json
 
 # Profile-related endpoints reside here.
-
-def checkJson(request, expected):
-    for term in expected:
-        if term not in request:
-            return False
-    return True
-
-def httpBadRequest():
-    return HttpResponse(
-        "400 Bad request",
-        status=400
-    )
-
 
 # URI: /api/login
 # Expect: email, oauthid
 def login(request):
     expected_fields = ["email", "oauthid"]
     
-    json_req = json.loads(request.body.decode("utf-8"))
-    if not checkJson(json_req, expected_fields):
+    try:
+        json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
+    except UnexpectedContentException:
         return httpBadRequest()
     
-    user = get_object_or_404(
-        User,
-        email=json_req["email"]
-    )
+    user = None
+    try:
+        user = User.objects.get(email=json_req["email"])
+    except ObjectDoesNotExist:
+        return HttpResponse(
+            "401 Unauthorized",
+            status=401
+        )
 
-    if not bcrypt.checkpw(json_req["oauthid"], user.oauthid):
+    if not bcrypt.checkpw(json_req["oauthid"].encode('utf-8'),
+                          user.oauthid.encode('utf-8')):
         return HttpResponse(
             "401 Unauthorized",
             status=401
@@ -51,15 +45,16 @@ def login(request):
 def signup(request):
     expected_fields = ["email", "oauthid", "name", "photourl", "location", "bio"]
     
-    json_req = json.loads(request.body.decode("utf-8"))
-    if not checkJson(json_req, expected_fields):
+    try:
+        json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
+    except UnexpectedContentException:
         return httpBadRequest()
     
     pwd_hash = bcrypt.hashpw(
         json_req["oauthid"].encode('utf-8'),
         bcrypt.gensalt()
-    )
-
+    ).decode("utf-8")
+    
     try:
         User.objects.create(
             name=json_req["name"],
