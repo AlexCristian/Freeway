@@ -23,20 +23,20 @@ def login(request):
         user = User.objects.get(email=json_req["email"])
     except ObjectDoesNotExist:
         return HttpResponse(
-            "401 Unauthorized",
+            "Unauthorized",
             status=401
         )
 
     if not bcrypt.checkpw(json_req["oauthid"].encode('utf-8'),
                           user.oauthid.encode('utf-8')):
         return HttpResponse(
-            "401 Unauthorized",
+            "Unauthorized",
             status=401
         )
     else:
         request.session["uemail"] = user.email
         return HttpResponse(
-            "200 Login acknowledged",
+            "Login acknowledged",
             status=200
         )
 
@@ -66,21 +66,37 @@ def signup(request):
         )
     except ValidationError:
         return HttpResponse(
-            "400 Invalid registration data",
+            "Invalid registration data",
             status=400
         )
     else:
         return HttpResponse(
-            "200 Registration acknowledged",
+            "Registration acknowledged",
             status=200
         )
 
 # URI: /api/setbio
 # Expect: newbio
 def setbio(request):
+    expected_fields = ["bio"]
+
+    try:
+        json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
+    except UnexpectedContentException:
+        return httpBadRequest()
+    
+    # Not implemented.
     return HttpResponse("Not implemented", status=501)
 
 # URI: /api/setlocation
 # Expect: newlocation
 def setlocation(request):
+    expected_fields = ["location"]
+
+    try:
+        json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
+    except UnexpectedContentException:
+        return httpBadRequest()
+    
+    # Not implemented.
     return HttpResponse("Not implemented", status=501)

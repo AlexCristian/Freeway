@@ -22,6 +22,6 @@ def getSafeJsonFromBody(expect, body):
 
 def httpBadRequest():
     return HttpResponse(
-        "400 Bad request",
+        "Bad request",
         status=400
     )

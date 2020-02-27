@@ -1,9 +1,16 @@
 from django.db import models
+from django.db.models import Model
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
 import uuid
 
-class User(models.Model):
+@receiver(pre_save)
+def pre_save_handler(sender, instance, *args, **kwargs):
+    instance.full_clean()
+
+class User(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField()
+    email = models.EmailField(max_length=200, unique=True)
     oauthid = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     photourl = models.CharField(max_length=500)
@@ -11,7 +18,7 @@ class User(models.Model):
     datecreated = models.DateField(auto_now_add=True)
     location = models.CharField(max_length=200)
 
-class Task(models.Model):
+class Task(Model):
     
     DEFAULT = 0
     POSTED = 1
@@ -35,21 +42,21 @@ class Task(models.Model):
     volunteerid = models.UUIDField()
     state = models.IntegerField(choices=TASK_STATUS_CHOICES, default=0)
 
-class Swipe(models.Model):
+class Swipe(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     swiperid = models.UUIDField()
     swipedid = models.UUIDField()
     taskid = models.UUIDField()
     matched = models.BooleanField()
 
-class Conversation(models.Model):
+class Conversation(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     pinid = models.UUIDField()
     volunteerid = models.UUIDField()
     taskid = models.UUIDField()
     archived = models.BooleanField()
 
-class Message(models.Model):
+class Message(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversationid = models.UUIDField()
     datecreated = models.DateField(auto_now_add=True)
