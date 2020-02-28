@@ -4,9 +4,12 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save
 import uuid
 
+validated_models = ["User", "Task", "Swipe", "Conversation", "Message"]
+
 @receiver(pre_save)
 def pre_save_handler(sender, instance, *args, **kwargs):
-    instance.full_clean()
+    if type(instance).__name__ in validated_models:
+        instance.full_clean()
 
 class User(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
