@@ -34,11 +34,24 @@ def login(request):
             status=401
         )
     else:
+        if "uemail" in request.session:
+            logout(request)
         request.session["uemail"] = user.email
         return HttpResponse(
             "Login acknowledged",
             status=200
         )
+
+# URI: /api/logout
+# Expect:
+def logout(request):
+    if "uemail" in request.session:
+        del request.session["uemail"]
+        return HttpResponse(
+            "Logout acknowledged",
+            status=200
+        )
+    return httpBadRequest()
 
 # URI: /api/signup
 # Expect: email, oauthid, name, photourl, location, bio
@@ -85,8 +98,21 @@ def setbio(request):
     except UnexpectedContentException:
         return httpBadRequest()
     
-    # Not implemented.
-    return HttpResponse("Not implemented", status=501)
+    user = None
+    try:
+        user = User.objects.get(email=request.session["uemail"])
+    except (ObjectDoesNotExist, KeyError):
+        return HttpResponse(
+            "Unauthorized",
+            status=401
+        )
+    
+    user.bio = json_req["bio"]
+    user.save()
+    return HttpResponse(
+        "Bio updated",
+        status=200
+    )
 
 # URI: /api/setlocation
 # Expect: newlocation
@@ -98,5 +124,18 @@ def setlocation(request):
     except UnexpectedContentException:
         return httpBadRequest()
     
-    # Not implemented.
-    return HttpResponse("Not implemented", status=501)
+    user = None
+    try:
+        user = User.objects.get(email=request.session["uemail"])
+    except (ObjectDoesNotExist, KeyError):
+        return HttpResponse(
+            "Unauthorized",
+            status=401
+        )
+    
+    user.location = json_req["location"]
+    user.save()
+    return HttpResponse(
+        "Location updated",
+        status=200
+    )
