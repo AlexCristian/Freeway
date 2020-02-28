@@ -243,7 +243,7 @@ class SetLocationTests(TestCase):
                                         }),
                                         content_type='application/json')
         self.assertEqual(User.objects.get(email="jon@example.com").location, "Madrid")
-        self.assertEqual(response.status_code, 200) # Unimplemented, expect fail.
+        self.assertEqual(response.status_code, 200)
 
     def test_setlocation_malformed_json(self):
         response = self.client.generic('GET',
