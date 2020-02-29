@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import ValidationError
 from django.http import HttpResponse
@@ -37,6 +36,7 @@ def login(request):
         if "uemail" in request.session:
             logout(request)
         request.session["uemail"] = user.email
+        request.session["id"] = user.id
         return HttpResponse(
             "Login acknowledged",
             status=200
@@ -47,6 +47,7 @@ def login(request):
 def logout(request):
     if "uemail" in request.session:
         del request.session["uemail"]
+        del request.session["id"]
         return HttpResponse(
             "Logout acknowledged",
             status=200

@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from api.models import User
 import json
 
 class UnexpectedContentException(Exception):
@@ -25,3 +26,6 @@ def httpBadRequest():
         "Bad request",
         status=400
     )
+
+def getUserById(id):
+    return User.objects.get(id=id)
