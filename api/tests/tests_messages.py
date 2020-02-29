@@ -33,7 +33,7 @@ class PostMessageTests(TestCase):
                             content_type='application/json')
 
         self.client.generic('GET',
-                            reverse('api:createtask'),
+                            reverse('api:task'),
                             json.dumps(
                             {
                                 "description": "This is a test task",
@@ -59,10 +59,9 @@ class PostMessageTests(TestCase):
 
         response = self.client.generic(
             'GET',
-            reverse('api:postmessage'),
+            reverse('api:postmessage', args=[conversation.id]),
             json.dumps(
             {
-                "conversationid": str(conversation.id),
                 "content": "This is a message!",
             }),
             content_type="application/json"

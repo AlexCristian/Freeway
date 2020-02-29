@@ -4,13 +4,12 @@ from django.core.validators import ValidationError
 from django.http import HttpResponse
 from api.models import Task, User
 from api.common import *
-import bcrypt
 
 # Task-related endpoints reside here.
 
-# URI: /api/createtask
+# URI: /api/task
 # Expect: description
-def createtask(request):
+def task(request):
     expected_fields = ["description"]
 
     try:
@@ -29,7 +28,7 @@ def createtask(request):
             description=json_req["description"],
             pinid=user.id,
             volunteerid=user.id,  # May not be the best choice but can't leave it null
-            state=1,
+            state=Task.POSTED,
         )
     except ValidationError:
         return HttpResponse(

@@ -11,7 +11,7 @@ urlpatterns = [
     path('signup', userprofiles.signup, name='signup'),
     path('setbio', userprofiles.setbio, name='setbio'),
     path('setlocation', userprofiles.setlocation, name='setlocation'),
-    path('postmessage', messages.postmessage, name='postmessage'),
+    path('messages\<conversationid>', messages.postmessage, name='postmessage'),
     path('createconversation', messages.createconversation, name='createconversation'),
-    path('createtask', tasks.createtask, name='createtask'),
+    path('task', tasks.task, name='task'),
 ]

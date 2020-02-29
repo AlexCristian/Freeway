@@ -37,10 +37,10 @@ def createconversation(request):
             status=200
         )
 
-# URI: /api/postmessage
-# Expect: conversationid, content
-def postmessage(request):
-    expected_fields = ["conversationid", "content"]
+# URI: /api/message/:[conversationid]
+# Expect: content
+def postmessage(request, conversationid):
+    expected_fields = ["content"]
 
     try:
         json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
@@ -55,8 +55,8 @@ def postmessage(request):
 
     try:
         Message.objects.create(
-            conversationid=json_req["conversationid"],
-            senderid=str(user.id),
+            conversationid=conversationid,
+            senderid=user.id,
             content=json_req["content"],
         )
     except ValidationError:
