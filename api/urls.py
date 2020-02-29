@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .endpoints import views, userprofiles
+from .endpoints import messages, tasks, userprofiles, views
 
 app_name = "api"
 
@@ -11,4 +11,7 @@ urlpatterns = [
     path('signup', userprofiles.signup, name='signup'),
     path('setbio', userprofiles.setbio, name='setbio'),
     path('setlocation', userprofiles.setlocation, name='setlocation'),
+    path('postmessage', messages.postmessage, name='postmessage'),
+    path('createconversation', messages.createconversation, name='createconversation'),
+    path('createtask', tasks.createtask, name='createtask'),
 ]

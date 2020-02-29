@@ -52,7 +52,7 @@ class SigninTests(TestCase):
                                         }),
                                         content_type='application/json')
         self.assertEqual(response.status_code, 401)
-    
+
     def test_signin_malformed_json(self):
         response = self.client.generic('GET',
                                         reverse('api:login'),
@@ -87,10 +87,10 @@ class LogoutTests(TestCase):
                                 "oauthid": "abcdefg"
                             }),
                             content_type='application/json')
-        
+
         response = self.client.generic('GET', reverse('api:logout'))
         self.assertEqual(response.status_code, 200)
-    
+
     def test_logout_no_signin(self):
         response = self.client.generic('GET', reverse('api:logout'))
         self.assertEqual(response.status_code, 400)
@@ -109,7 +109,7 @@ class SignupTests(TestCase):
                             "bio": "Hello.",
                         }),
                         content_type='application/json')
-    
+
     def test_signup(self):
         response = self.client.generic('GET',
                                         reverse('api:signup'),
@@ -124,7 +124,7 @@ class SignupTests(TestCase):
                                         }),
                                         content_type='application/json')
         self.assertEqual(response.status_code, 200)
-    
+
     def test_signup_malformed_json(self):
         response = self.client.generic('GET',
                                         reverse('api:signup'),
@@ -134,7 +134,7 @@ class SignupTests(TestCase):
                                         }),
                                         content_type='application/json')
         self.assertEqual(response.status_code, 400)
-    
+
     def test_signup_invalid_email(self):
         response = self.client.generic('GET',
                                         reverse('api:signup'),
@@ -149,7 +149,7 @@ class SignupTests(TestCase):
                                         }),
                                         content_type='application/json')
         self.assertEqual(response.status_code, 400)
-    
+
     def test_signup_duplicate_email(self):
         response = self.client.generic('GET',
                                         reverse('api:signup'),
@@ -187,7 +187,7 @@ class SetBioTests(TestCase):
                                 "oauthid": "abcdefg"
                             }),
                             content_type='application/json')
-    
+
     def test_setbio(self):
         self.assertEqual(User.objects.get(email="jon@example.com").bio, "Hello.")
         response = self.client.generic('GET',
@@ -232,7 +232,7 @@ class SetLocationTests(TestCase):
                                 "oauthid": "abcdefg"
                             }),
                             content_type='application/json')
-    
+
     def test_setlocation(self):
         self.assertEqual(User.objects.get(email="jon@example.com").location, "Philadelphia")
         response = self.client.generic('GET',
