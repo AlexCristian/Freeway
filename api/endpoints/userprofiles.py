@@ -139,3 +139,27 @@ def setlocation(request):
         "Location updated",
         status=200
     )
+
+# URI: /api/profile
+# Expect:
+def profile(request):
+    if "uemail" not in request.session:
+        return httpBadRequest()
+    
+    user = None
+    try:
+        user = User.objects.get(email=request.session["uemail"])
+    except (ObjectDoesNotExist, KeyError):
+        return HttpResponse(
+            "Unauthorized",
+            status=401
+        )
+    response = {}
+    response["bio"] = user.bio
+    response["location"] = user.location
+
+    return HttpResponse(
+        json.dumps(response),
+        status=200,
+        content_type='application/json'
+    )

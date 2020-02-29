@@ -14,4 +14,5 @@ urlpatterns = [
     path('messages\<conversationid>', messages.postmessage, name='postmessage'),
     path('createconversation', messages.createconversation, name='createconversation'),
     path('task', tasks.task, name='task'),
+    path('profile', userprofiles.profile, name='profile'),
 ]
