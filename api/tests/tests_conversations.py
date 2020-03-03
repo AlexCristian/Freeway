@@ -96,7 +96,7 @@ class ConversationsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(response.content.decode('utf-8'),
-                         '[{"role": "PiN", "partnerid": "' + self.u2_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "Test2."}, {"role": "Volunteer", "partnerid": "' + self.u3_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "Test4."}]')
+                         '[{"role": "PiN", "partnerid": "' + self.u2_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "Test2.", "archived": false}, {"role": "Volunteer", "partnerid": "' + self.u3_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "Test4.", "archived": false}]')
         self.assertEqual(response['content-type'], 'application/json')
 
     def test_conversations_no_message(self):
@@ -116,7 +116,7 @@ class ConversationsTests(TestCase):
                                         reverse('api:conversations'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode('utf-8'),
-                         '[{"role": "PiN", "partnerid": "' + self.u2_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": ""}, {"role": "Volunteer", "partnerid": "' + self.u3_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": ""}]')
+                         '[{"role": "PiN", "partnerid": "' + self.u2_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "", "archived": false}, {"role": "Volunteer", "partnerid": "' + self.u3_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "", "archived": false}]')
         self.assertEqual(response['content-type'], 'application/json')
 
 class ArchiveConversationTests(TestCase):

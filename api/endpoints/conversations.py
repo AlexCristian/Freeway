@@ -53,6 +53,7 @@ def conversations(request):
         item["name"] = partner.name
         item["photourl"] = partner.photourl
         item["lastmsg"] = lastmsg
+        item["archived"] = convo.archived
         response.append(item)
     
     for convo in convos_vol:
@@ -66,6 +67,7 @@ def conversations(request):
         item["name"] = partner.name
         item["photourl"] = partner.photourl
         item["lastmsg"] = lastmsg
+        item["archived"] = convo.archived
         response.append(item)
     
     return HttpResponse(
