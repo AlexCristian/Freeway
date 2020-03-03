@@ -254,3 +254,37 @@ class SetLocationTests(TestCase):
                                         }),
                                         content_type='application/json')
         self.assertEqual(response.status_code, 400)
+
+class ProfileTests(TestCase):
+    def setUp(self):
+        self.client.generic('GET',
+                        reverse('api:signup'),
+                        json.dumps(
+                        {
+                            "name": "Jon Doe",
+                            "email": "jon@example.com",
+                            "oauthid": "abcdefg",
+                            "photourl": "https://google.com/test.png",
+                            "location": "Madrid",
+                            "bio": "Hello.",
+                        }),
+                        content_type='application/json')
+    
+    def test_profile(self):
+        self.client.generic('GET',
+                            reverse('api:login'),
+                            json.dumps(
+                            {
+                                "email": "jon@example.com",
+                                "oauthid": "abcdefg"
+                            }),
+                            content_type='application/json')
+        response = self.client.generic('GET', reverse('api:profile'))
+        self.assertEqual(response.content.decode('utf-8'),
+                         '{"bio": "Hello.", "location": "Madrid"}')
+        self.assertEqual(response['content-type'], 'application/json')
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_no_login(self):
+        response = self.client.generic('GET', reverse('api:profile'))
+        self.assertEqual(response.status_code, 400)

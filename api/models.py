@@ -62,6 +62,6 @@ class Conversation(Model):
 class Message(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     conversationid = models.UUIDField()
-    datecreated = models.DateField(auto_now_add=True)
+    datecreated = models.DateTimeField(auto_now_add=True)
     senderid = models.UUIDField()
     content = models.CharField(max_length=5000)

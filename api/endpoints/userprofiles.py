@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import ValidationError
 from django.http import HttpResponse
@@ -37,6 +36,7 @@ def login(request):
         if "uemail" in request.session:
             logout(request)
         request.session["uemail"] = user.email
+        request.session["id"] = str(user.id)
         return HttpResponse(
             "Login acknowledged",
             status=200
@@ -45,6 +45,8 @@ def login(request):
 # URI: /api/logout
 # Expect:
 def logout(request):
+    if "id" in request.session:
+        del request.session["id"]
     if "uemail" in request.session:
         del request.session["uemail"]
         return HttpResponse(
@@ -138,4 +140,28 @@ def setlocation(request):
     return HttpResponse(
         "Location updated",
         status=200
+    )
+
+# URI: /api/profile
+# Expect:
+def profile(request):
+    if "uemail" not in request.session:
+        return httpBadRequest()
+    
+    user = None
+    try:
+        user = User.objects.get(email=request.session["uemail"])
+    except (ObjectDoesNotExist, KeyError):
+        return HttpResponse(
+            "Unauthorized",
+            status=401
+        )
+    response = {}
+    response["bio"] = user.bio
+    response["location"] = user.location
+
+    return HttpResponse(
+        json.dumps(response),
+        status=200,
+        content_type='application/json'
     )
