@@ -37,7 +37,7 @@ def createconversation(request):
             status=200
         )
 
-# URI: /api/message/:[conversationid]
+# URI: /api/messages/:[conversationid]
 # Expect: content
 def postmessage(request, conversationid):
     expected_fields = ["content"]

@@ -5,6 +5,13 @@ from api.common import *
 
 # Conversation-related endpoints reside here.
 
+# Helper method. Returns the content of the last message in a conversation.
+def fetch_last_message(convo_id):
+    result = Message.objects.filter(conversationid=convo_id).order_by('-datecreated').first()
+    if result == None:
+        return ""
+    return result.content
+
 # URI: /api/conversations
 # Expect:
 # Response: array of {Role (PiN or Volunteer), UID, Name, ProfilePic, TruncatedLastMessage}
@@ -15,7 +22,7 @@ def conversations(request):
 
     convos_pin = None
     try:
-        convos_pin = Conversation.objects.get(pinid=request.session["id"])
+        convos_pin = Conversation.objects.filter(pinid=request.session["id"])
     except KeyError:
         return HttpResponse(
             "Unauthorized",
@@ -26,7 +33,7 @@ def conversations(request):
     
     convos_vol = None
     try:
-        convos_vol = Conversation.objects.get(volunteerid=request.session["id"])
+        convos_vol = Conversation.objects.filter(volunteerid=request.session["id"])
     except KeyError:
         return HttpResponse(
             "Unauthorized",
@@ -36,29 +43,29 @@ def conversations(request):
         pass
     
     for convo in convos_pin:
-        partnerid = convo.volunteerid
+        partnerid = str(convo.volunteerid)
         partner = getUserById(convo.volunteerid)
-        lastmsg = Message.objects.filter(conversationid=convo.id).order_by('-datecreated').first()
+        lastmsg = fetch_last_message(convo.id)
 
         item = {}
         item["role"] = "PiN"
-        item["uid"] = partnerid
+        item["partnerid"] = partnerid
         item["name"] = partner.name
         item["photourl"] = partner.photourl
-        item["lastmsg"] = lastmsg.content
+        item["lastmsg"] = lastmsg
         response.append(item)
     
     for convo in convos_vol:
-        partnerid = convo.pinid
+        partnerid = str(convo.pinid)
         partner = getUserById(convo.pinid)
-        lastmsg = Message.objects.filter(conversationid=convo.id).order_by('-datecreated').first()
+        lastmsg = fetch_last_message(convo.id)
 
         item = {}
         item["role"] = "Volunteer"
-        item["uid"] = partnerid
+        item["partnerid"] = partnerid
         item["name"] = partner.name
         item["photourl"] = partner.photourl
-        item["lastmsg"] = lastmsg.content
+        item["lastmsg"] = lastmsg
         response.append(item)
     
     return HttpResponse(
@@ -67,11 +74,11 @@ def conversations(request):
         content_type='application/json'
     )
 
-# Helper method, internal use only.
+# Helper method, internal use only. Set "archived" boolean flag to true.
 def _archive_conversation(convo_id):
     convo = None
     try:
-        convo = Conversation.objects.get(convo_id)
+        convo = Conversation.objects.get(id=convo_id)
     except ObjectDoesNotExist:
         return False
     

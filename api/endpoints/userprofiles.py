@@ -36,7 +36,7 @@ def login(request):
         if "uemail" in request.session:
             logout(request)
         request.session["uemail"] = user.email
-        request.session["id"] = user.id
+        request.session["id"] = str(user.id)
         return HttpResponse(
             "Login acknowledged",
             status=200
@@ -45,9 +45,10 @@ def login(request):
 # URI: /api/logout
 # Expect:
 def logout(request):
+    if "id" in request.session:
+        del request.session["id"]
     if "uemail" in request.session:
         del request.session["uemail"]
-        del request.session["id"]
         return HttpResponse(
             "Logout acknowledged",
             status=200
