@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from api.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from api.models import Conversation, Message, Swipe, Task, User
 import json
 
 class UnexpectedContentException(Exception):
@@ -29,3 +30,41 @@ def httpBadRequest():
 
 def getUserById(id):
     return User.objects.get(id=id)
+
+def check_taskid(id):
+    try:
+        task = Task.objects.get(id=id)
+    except (ObjectDoesNotExist, KeyError):
+        return False
+    return True
+
+def check_userid(id):
+    try:
+        user = User.objects.get(id=id)
+    except (ObjectDoesNotExist, KeyError):
+        return False
+    return True
+
+def check_swipe(swiperid, swipedid):
+    try:
+        swipe = Swipe.objects.get(swiperid=swiperid, swipedid=swipedid)
+    except (ObjectDoesNotExist, KeyError):
+        return False
+    return True
+
+def check_convoid(id):
+    try:
+        convo = Conversation.objects.get(id=id)
+    except (ObjectDoesNotExist, KeyError):
+        return False
+    return True
+
+def check_messageid(id):
+    try:
+        message = Message.objects.get(id=id)
+    except (ObjectDoesNotExist, KeyError):
+        return False
+    return True
+
+def isSwiped():
+    pass

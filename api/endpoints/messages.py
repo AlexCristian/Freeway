@@ -42,6 +42,9 @@ def createconversation(request):
 def postmessage(request, conversationid):
     expected_fields = ["content"]
 
+    if not check_convoid(conversationid):
+        return HttpResponse("Invalid conversationid", status=400)
+
     try:
         json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
     except UnexpectedContentException:

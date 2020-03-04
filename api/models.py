@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Model
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
+from django.contrib.postgres.fields import ArrayField
 import uuid
 
 validated_models = ["User", "Task", "Swipe", "Conversation", "Message"]
@@ -18,11 +19,15 @@ class User(Model):
     name = models.CharField(max_length=200)
     photourl = models.CharField(max_length=500)
     bio = models.CharField(max_length=5000)
+    bio_embedding = ArrayField(models.FloatField(), size=768, default=None)
     datecreated = models.DateField(auto_now_add=True)
     location = models.CharField(max_length=200)
 
+    class Meta:
+        db_table = 'User'
+
 class Task(Model):
-    
+
     DEFAULT = 0
     POSTED = 1
     COMMITTED_PIN = 2
@@ -40,10 +45,14 @@ class Task(Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     description = models.CharField(max_length=5000)
+    description_embedding = ArrayField(models.FloatField(), size=768, default=None)
     datecreated = models.DateField(auto_now_add=True)
     pinid = models.UUIDField()
     volunteerid = models.UUIDField()
     state = models.IntegerField(choices=TASK_STATUS_CHOICES, default=0)
+
+    class Meta:
+        db_table = 'Task'
 
 class Swipe(Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

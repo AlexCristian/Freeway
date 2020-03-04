@@ -5,6 +5,9 @@ from django.http import HttpResponse
 from api.models import Task, User
 from api.common import *
 
+from api.bert_embeddings import Embedding
+embed_model = Embedding()
+
 # Task-related endpoints reside here.
 
 # URI: /api/task
@@ -17,15 +20,18 @@ def task(request):
     except UnexpectedContentException:
         return httpBadRequest()
 
+    global embed_model
+    embedding = list(embed_model.get_embedding(json_req["description"]))
+
     user = None
     try:
         user = User.objects.get(email=request.session["uemail"])
     except (ObjectDoesNotExist, KeyError):
         return HttpResponse("Unauthorized", status=401)
-
     try:
         Task.objects.create(
             description=json_req["description"],
+            description_embedding=embedding,
             pinid=user.id,
             volunteerid=user.id,  # May not be the best choice but can't leave it null
             state=Task.POSTED,

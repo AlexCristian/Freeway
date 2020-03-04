@@ -5,18 +5,22 @@ from api.models import User
 from api.common import *
 import bcrypt
 
+from api.bert_embeddings import Embedding
+embed_model = Embedding()
+
+
 # Profile-related endpoints reside here.
 
 # URI: /api/login
 # Expect: email, oauthid
 def login(request):
     expected_fields = ["email", "oauthid"]
-    
+
     try:
         json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
     except UnexpectedContentException:
         return httpBadRequest()
-    
+
     user = None
     try:
         user = User.objects.get(email=json_req["email"])
@@ -59,17 +63,20 @@ def logout(request):
 # Expect: email, oauthid, name, photourl, location, bio
 def signup(request):
     expected_fields = ["email", "oauthid", "name", "photourl", "location", "bio"]
-    
+
     try:
         json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
     except UnexpectedContentException:
         return httpBadRequest()
-    
+
     pwd_hash = bcrypt.hashpw(
         json_req["oauthid"].encode('utf-8'),
         bcrypt.gensalt()
     ).decode("utf-8")
-    
+
+    global embed_model
+    bio_embedding = list(embed_model.get_embedding(json_req["bio"]))
+
     try:
         User.objects.create(
             name=json_req["name"],
@@ -77,7 +84,8 @@ def signup(request):
             oauthid=pwd_hash,
             photourl=json_req["photourl"],
             location=json_req["location"],
-            bio=json_req["bio"]
+            bio=json_req["bio"],
+            bio_embedding=bio_embedding,
         )
     except ValidationError:
         return HttpResponse(
@@ -99,7 +107,9 @@ def setbio(request):
         json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
     except UnexpectedContentException:
         return httpBadRequest()
-    
+
+
+
     user = None
     try:
         user = User.objects.get(email=request.session["uemail"])
@@ -108,8 +118,12 @@ def setbio(request):
             "Unauthorized",
             status=401
         )
-    
+
+    global embed_model
+    bio_embedding = list(embed_model.get_embedding(json_req["bio"]))
+
     user.bio = json_req["bio"]
+    user.bio_embedding = bio_embedding
     user.save()
     return HttpResponse(
         "Bio updated",
@@ -125,7 +139,7 @@ def setlocation(request):
         json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
     except UnexpectedContentException:
         return httpBadRequest()
-    
+
     user = None
     try:
         user = User.objects.get(email=request.session["uemail"])
@@ -134,7 +148,7 @@ def setlocation(request):
             "Unauthorized",
             status=401
         )
-    
+
     user.location = json_req["location"]
     user.save()
     return HttpResponse(
@@ -147,7 +161,7 @@ def setlocation(request):
 def profile(request):
     if "uemail" not in request.session:
         return httpBadRequest()
-    
+
     user = None
     try:
         user = User.objects.get(email=request.session["uemail"])
