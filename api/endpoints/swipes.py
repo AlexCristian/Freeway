@@ -15,9 +15,9 @@ def pin_swipe(request, taskid, volunteerid, match):
         return httpBadRequest()
 
     if not check_taskid(taskid):
-        return HttpResponse("Invalid taskid", status=400)
+        return httpBadRequest()
     if not check_userid(volunteerid):
-        return HttpResponse("Invalid volunteerid", status=400)
+        return httpBadRequest()
 
     try:
         Swipe.objects.create(
@@ -47,12 +47,12 @@ def volunteer_swipe(request, taskid, pinid, match):
     volunteerid = request.session["id"]
 
     if not check_taskid(taskid):
-        return HttpResponse("Invalid taskid", status=400)
+        return httpBadRequest()
     if not check_userid(pinid):
-        return HttpResponse("Invalid pinid", status=400)
+        return httpBadRequest()
 
     if not check_swipe(pinid, volunteerid):
-        return HttpResponse("Pin didn't swipe!!! Most likely an error from front-end side", status=401)
+        return HttpResponse("Pin didn't swipe! Most likely an error from front-end side", status=401)
 
     try:
         Swipe.objects.create(
@@ -64,6 +64,7 @@ def volunteer_swipe(request, taskid, pinid, match):
 
         if match == True: # This means both parties swiped right.
             # Implement this!!!
+            return HttpResponse("Not implemented", status=501)
             pass
 
 

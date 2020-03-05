@@ -30,6 +30,9 @@ def pin_feed(request, task_id):
     filtered_users = User.objects.filter(location=requesting_user.location)
 
     # Implement this by joining tables? --> Similar complexity(?)
+
+    # Build dictionary of volunteers the PiN has already swiped on, so that
+    # don't reappear in the result set.
     pre_swiped_volunteers = Swipe.objects.filter(taskid=task_id, swiperid=pinid)
     d = {}
     for volunteer in pre_swiped_volunteers:
@@ -69,12 +72,15 @@ def volunteer_feed(request):
 
     volunteerid = request.session["id"]
 
-    try:
-        swiped = Swipe.objects.get(swipedid=volunteerid)
-        if type(swiped) != type([]):
-            swiped = [swiped]
-    except (ObjectDoesNotExist, KeyError):
-        swiped = []
+    # try:
+    #     swiped = Swipe.objects.get(swipedid=volunteerid)
+    #     if type(swiped) != type([]):
+    #         swiped = [swiped]
+    # except (ObjectDoesNotExist, KeyError):
+    #     swiped = []
+
+
+    swiped = Swipe.objects.filter(swipedid=volunteerid)
 
 
     try:

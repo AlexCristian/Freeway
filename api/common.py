@@ -65,6 +65,3 @@ def check_messageid(id):
     except (ObjectDoesNotExist, KeyError):
         return False
     return True
-
-def isSwiped():
-    pass
