@@ -71,17 +71,7 @@ def volunteer_feed(request):
         return httpBadRequest()
 
     volunteerid = request.session["id"]
-
-    # try:
-    #     swiped = Swipe.objects.get(swipedid=volunteerid)
-    #     if type(swiped) != type([]):
-    #         swiped = [swiped]
-    # except (ObjectDoesNotExist, KeyError):
-    #     swiped = []
-
-
     swiped = Swipe.objects.filter(swipedid=volunteerid)
-
 
     try:
         swiper = Swipe.objects.get(swiperid=volunteerid)

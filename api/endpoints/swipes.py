@@ -65,8 +65,6 @@ def volunteer_swipe(request, taskid, pinid, match):
         if match == True: # This means both parties swiped right.
             # Implement this!!!
             return HttpResponse("Not implemented", status=501)
-            pass
-
 
     except ValidationError:
         return HttpResponse(
