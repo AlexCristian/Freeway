@@ -29,7 +29,7 @@ def conversations(request):
             status=401
         )
     except ObjectDoesNotExist:
-        pass
+        pass # This query yielded no conversations.
     
     convos_vol = None
     try:
@@ -40,7 +40,7 @@ def conversations(request):
             status=401
         )
     except ObjectDoesNotExist:
-        pass
+        pass # This query yielded no conversations.
     
     for convo in convos_pin:
         partnerid = str(convo.volunteerid)

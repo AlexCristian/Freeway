@@ -7,7 +7,7 @@ import json
 
 
 
-# This tests createtask, createconversation and postmessage.
+# This tests task, createconversation and postmessage.
 class PostMessageTests(TestCase):
     def setUp(self):
         self.client.generic('GET',
