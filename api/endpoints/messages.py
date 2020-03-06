@@ -39,6 +39,15 @@ def createconversation(request):
 
 # URI: /api/messages/:[conversationid]
 # Expect: content
+def router_message(request, conversationid):
+    if request.method == 'POST':
+        return postmessage(request, conversationid)
+    elif request.method == 'GET':
+        return getmessage(request, conversationid)
+    else:
+        return httpBadRequest()
+
+
 def postmessage(request, conversationid):
     expected_fields = ["content"]
 
@@ -72,3 +81,6 @@ def postmessage(request, conversationid):
             "New message added to DB",
             status=200
         )
+
+def getmessage(request, conversationid):
+    return HttpResponse("Not implemented", status=501)
