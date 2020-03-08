@@ -18,8 +18,8 @@ def get_uid_by_email(_email):
     return str(User.objects.get(email=_email).id)
 
 def create_message(self, convo_id, content):
-    self.client.generic('GET',
-                        reverse('api:postmessage', args=[convo_id]),
+    self.client.generic('POST',
+                        reverse('api:router_message', args=[convo_id]),
                         json.dumps(
                         {
                             "content": content

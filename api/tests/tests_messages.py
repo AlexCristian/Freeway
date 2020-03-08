@@ -58,8 +58,8 @@ class PostMessageTests(TestCase):
         conversation = Conversation.objects.get(taskid=self.task.id)
 
         response = self.client.generic(
-            'GET',
-            reverse('api:postmessage', args=[conversation.id]),
+            'POST',
+            reverse('api:router_message', args=[conversation.id]),
             json.dumps(
             {
                 "content": "This is a message!",
