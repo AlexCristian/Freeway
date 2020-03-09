@@ -31,8 +31,8 @@ class TaskTests(TestCase):
                             content_type='application/json')
 
     def test_create_task(self):
-        res = self.client.generic('GET',
-                            reverse('api:task'),
+        res = self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "This is a test task",
@@ -41,8 +41,8 @@ class TaskTests(TestCase):
         self.assertEqual(res.status_code, 200)
 
     def test_get_task(self):
-        res = self.client.generic('GET',
-                            reverse('api:task'),
+        res = self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "This is a test task",
@@ -50,13 +50,13 @@ class TaskTests(TestCase):
                             content_type='application/json')
         task = Task.objects.get(description="This is a test task")
         res = self.client.generic('GET',
-                            '/api/get_task/' + str(task.id),
+                            '/api/task/' + str(task.id),
                             content_type='application/json')
         self.assertEqual(res.status_code, 200)
 
     def test_commit_volunteer_before_pin(self):
-        res = self.client.generic('GET',
-                            reverse('api:task'),
+        res = self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "This is a test task",
@@ -69,8 +69,8 @@ class TaskTests(TestCase):
         self.assertEqual(res.status_code, 400)
 
     def test_commit_both(self):
-        res = self.client.generic('GET',
-                            reverse('api:task'),
+        res = self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "This is a test task",

@@ -43,8 +43,8 @@ class PinSwipeTests(TestCase):
                             }),
                             content_type='application/json')
 
-        response = self.client.generic('GET',
-                            reverse('api:task'),
+        response = self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "This is a test task",

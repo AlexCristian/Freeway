@@ -95,8 +95,8 @@ class PinFeedTests(TestCase):
                             }),
                             content_type='application/json')
 
-        self.client.generic('GET',
-                            reverse('api:task'),
+        self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "My name is Pavel and I’m seeking some legal advice on an immigration matter concerning my family of five. We’re not sure how to apply for permanent residency status.",
@@ -208,8 +208,8 @@ class VolunteerFeedTests(TestCase):
                             }),
                             content_type='application/json')
 
-        self.client.generic('GET',
-                            reverse('api:task'),
+        self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "My name is Pavel and I’m seeking some legal advice on an immigration matter concerning my family of five. We’re not sure how to apply for permanent residency status.",

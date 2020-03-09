@@ -57,7 +57,7 @@ def post_task(request):
             status=200
         )
 
-# URI: /api/get_task/:task_id:
+# URI: /api/task/:task_id:
 def get_task(request, taskid):
 
     if "uemail" not in request.session:
