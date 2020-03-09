@@ -10,9 +10,19 @@ embed_model = Embedding()
 
 # Task-related endpoints reside here.
 
+def router_task(request, taskid=None):
+    if request.method == 'POST':
+        return post_task(request)
+    elif request.method == 'GET':
+        if taskid:
+            return get_task(request, taskid)
+        else:
+            return httpBadRequest()
+
+
 # URI: /api/task
 # Expect: description
-def task(request):
+def post_task(request):
     expected_fields = ["description"]
 
     try:
