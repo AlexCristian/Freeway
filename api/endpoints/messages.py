@@ -108,19 +108,18 @@ def message_results_to_json(messages):
     result = []
     for message in messages:
         item = {}
-        item['msg_id'] = message.id
+        item['msg_id'] = str(message.id)
         item['content'] = message.content
-        item['datecreated'] = message.datecreated
-        item['senderid'] = message.senderid
+        item['datecreated'] = str(message.datecreated)
+        item['senderid'] = str(message.senderid)
         result.append(item)
-    result.reverse()
     return json.dumps(result)
 
 def getmessage(request, conversationid):
     try:
         results = Message.objects.filter(
             conversationid=conversationid
-        ).order_by('datecreated')[:20]
+        ).order_by('-datecreated')[:20]
     except ObjectDoesNotExist:
         return httpBadRequest()
 
@@ -132,7 +131,7 @@ def getmessage(request, conversationid):
 
 def getmessage_since_messageid(request, conversationid, messageid):
     try:
-        msg = Message.objects.get(messageid=messageid)
+        msg = Message.objects.get(id=messageid)
     except ObjectDoesNotExist:
         return httpBadRequest()
 
@@ -142,7 +141,7 @@ def getmessage_since_messageid(request, conversationid, messageid):
         results = Message.objects.filter(
             conversationid=conversationid,
             datecreated__lt=since_time
-        ).order_by('datecreated')[:20]
+        ).order_by('-datecreated')[:20]
     except ObjectDoesNotExist:
         return httpBadRequest()
 

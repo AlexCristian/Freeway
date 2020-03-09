@@ -11,6 +11,7 @@ urlpatterns = [
     path('setbio', userprofiles.setbio, name='setbio'),
     path('setlocation', userprofiles.setlocation, name='setlocation'),
     path('messages/<conversationid>', messages.router_message, name='router_message'),
+    path('messages/<conversationid>/<messageid>', messages.router_message, name='router_message'),
     path('createconversation', messages.createconversation, name='createconversation'),
     path('task', tasks.task, name='task'),
     path('profile', userprofiles.profile, name='profile'),
