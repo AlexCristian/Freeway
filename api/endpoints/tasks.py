@@ -46,3 +46,70 @@ def task(request):
             "New task added to DB",
             status=200
         )
+
+# URI: /api/get_task/:task_id:
+def get_task(request, taskid):
+
+    if "uemail" not in request.session:
+        return httpBadRequest()
+
+    try:
+        task = Task.objects.get(id=taskid)
+    except (ObjectDoesNotExist, KeyError):
+        return httpBadRequest()
+
+    res = {
+        "description": task.description,
+        "datecreated": str(task.datecreated),
+        "pinid":       str(task.pinid),
+        "volunteerid": str(task.volunteerid),
+        "state":       str(task.state)
+    }
+
+    return HttpResponse(
+        json.dumps(res),
+        status=200,
+        content_type='application/json'
+    )
+
+# URI: /api/commit/p/:task_id:
+def pin_commit(request, taskid):
+
+    if "uemail" not in request.session:
+        return httpBadRequest()
+
+    try:
+        task = Task.objects.get(id=taskid)
+    except (ObjectDoesNotExist, KeyError):
+        return httpBadRequest()
+
+    if task.state != Task.POSTED:
+        return httpBadRequest()
+
+    task.state = Task.COMMITTED_PIN
+    task.save()
+    return HttpResponse(
+        "Task commited by pin",
+        status=200
+    )
+
+# URI: /api/commit/v/:task_id:
+def volunteer_commit(request, taskid):
+
+    if "uemail" not in request.session:
+        return httpBadRequest()
+
+    try:
+        task = Task.objects.get(id=taskid)
+    except (ObjectDoesNotExist, KeyError):
+        return httpBadRequest()
+
+    if task.state != Task.COMMITTED_PIN:
+        return httpBadRequest()
+
+    task.state = Task.COMMITTED_CONS
+    task.save()
+    return HttpResponse(
+        "Task commited by volunteer",
+        status=200
+    )
