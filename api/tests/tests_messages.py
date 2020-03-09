@@ -92,7 +92,7 @@ class GetMessagesTests(TestCase):
                             content_type='application/json')
 
         self.client.generic('POST',
-                            '/api/task',
+                            reverse('api:task'),
                             json.dumps(
                             {
                                 "description": "This is a test task",
