@@ -30,8 +30,8 @@ class PostMessageTests(TestCase):
                             }),
                             content_type='application/json')
 
-        self.client.generic('GET',
-                            reverse('api:task'),
+        self.client.generic('POST',
+                            '/api/task',
                             json.dumps(
                             {
                                 "description": "This is a test task",
@@ -91,8 +91,8 @@ class GetMessagesTests(TestCase):
                             }),
                             content_type='application/json')
 
-        self.client.generic('GET',
-                            reverse('api:task'),
+        self.client.generic('POST',
+                            reverse('api:router_task'),
                             json.dumps(
                             {
                                 "description": "This is a test task",
@@ -157,7 +157,7 @@ class GetMessagesTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['content-type'], 'application/json')
-        
+
         msgs = json.loads(response.content.decode('utf-8'))
         self.assertEqual(len(msgs), 20)
         for i in range(0, len(msgs)):
@@ -171,11 +171,11 @@ class GetMessagesTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['content-type'], 'application/json')
-        
+
         msgs = json.loads(response.content.decode('utf-8'))
         mid = msgs[len(msgs) - 1]['msg_id']
         previous_len = len(msgs)
-        
+
         response = self.client.generic(
             'GET',
             reverse('api:router_message',
@@ -183,7 +183,7 @@ class GetMessagesTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['content-type'], 'application/json')
-        
+
         msgs = json.loads(response.content.decode('utf-8'))
         self.assertEqual(len(msgs), 20)
         for i in range(0, len(msgs)):

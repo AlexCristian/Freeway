@@ -81,7 +81,7 @@ class ConversationsTests(TestCase):
                                 "oauthid": "abcdefg"
                             }),
                             content_type='application/json')
-        
+
         c1 = create_mock_conversation(pinid=self.u1_id, volunteerid=self.u2_id)
         c2 = create_mock_conversation(pinid=self.u3_id, volunteerid=self.u1_id)
 
@@ -90,7 +90,7 @@ class ConversationsTests(TestCase):
 
         create_message(self, c2, "Test3.")
         create_message(self, c2, "Test4.")
-        
+
         response = self.client.generic('GET',
                                         reverse('api:conversations'))
         self.assertEqual(response.status_code, 200)
@@ -108,7 +108,7 @@ class ConversationsTests(TestCase):
                                 "oauthid": "abcdefg"
                             }),
                             content_type='application/json')
-        
+
         create_mock_conversation(pinid=self.u1_id, volunteerid=self.u2_id)
         create_mock_conversation(pinid=self.u3_id, volunteerid=self.u1_id)
 
@@ -136,7 +136,7 @@ class ArchiveConversationTests(TestCase):
         partnerid = "96efd272-72c0-4087-8dc5-abdaf9e892be"
         myid = get_uid_by_email("u1@t.com")
         self.convo_id = create_mock_conversation(partnerid, myid)
-    
+
     def test_archive(self):
         self.client.generic('GET',
                             reverse('api:login'),
