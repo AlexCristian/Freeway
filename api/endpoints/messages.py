@@ -37,13 +37,44 @@ def createconversation(request):
             status=200
         )
 
+# URI: /api/messages/:[conversationid]/:[messageid, optional]
+# Expect: content or None
+# Routes GET and POST requests. All security checks should happen here.
+def router_message(request, conversationid, messageid=None):
+    # Drop request if you're not logged in.
+    if "uemail" not in request.session:
+        return HttpResponse(
+            "Unauthorized",
+            status=401
+        )
+    # Get conversation to check if you have access permissions.
+    try:
+        convo = Conversation.objects.get(id=conversationid)
+        if request.session["id"] not in (str(convo.pinid), str(convo.volunteerid)):
+            return HttpResponse(
+                "Unauthorized",
+                status=401
+            )
+    except (ObjectDoesNotExist, KeyError):
+        # Drop request if the conversation id is invalid, or
+        # if the session is storing no ID (bad login, should
+        # not happen.
+        # TODO(AlexCristian): Log bad login here.
+        return httpBadRequest()
+
+    if request.method == 'POST':
+        return postmessage(request, conversationid)
+    elif request.method == 'GET':
+        if messageid:
+            return getmessage_since_messageid(request, conversationid, messageid)
+        return getmessage(request, conversationid)
+    else:
+        return httpBadRequest()
+
 # URI: /api/messages/:[conversationid]
 # Expect: content
 def postmessage(request, conversationid):
     expected_fields = ["content"]
-
-    if not check_convoid(conversationid):
-        return httpBadRequest()
 
     try:
         json_req = getSafeJsonFromBody(expected_fields, request.body.decode("utf-8"))
@@ -72,3 +103,50 @@ def postmessage(request, conversationid):
             "New message added to DB",
             status=200
         )
+
+def message_results_to_json(messages):
+    result = []
+    for message in messages:
+        item = {}
+        item['msg_id'] = str(message.id)
+        item['content'] = message.content
+        item['datecreated'] = str(message.datecreated)
+        item['senderid'] = str(message.senderid)
+        result.append(item)
+    return json.dumps(result)
+
+def getmessage(request, conversationid):
+    try:
+        results = Message.objects.filter(
+            conversationid=conversationid
+        ).order_by('-datecreated')[:20]
+    except ObjectDoesNotExist:
+        return httpBadRequest()
+
+    return HttpResponse(
+        message_results_to_json(results),
+        status=200,
+        content_type='application/json'
+    )
+
+def getmessage_since_messageid(request, conversationid, messageid):
+    try:
+        msg = Message.objects.get(id=messageid)
+    except ObjectDoesNotExist:
+        return httpBadRequest()
+
+    since_time = msg.datecreated
+
+    try:
+        results = Message.objects.filter(
+            conversationid=conversationid,
+            datecreated__lt=since_time
+        ).order_by('-datecreated')[:20]
+    except ObjectDoesNotExist:
+        return httpBadRequest()
+
+    return HttpResponse(
+        message_results_to_json(results),
+        status=200,
+        content_type='application/json'
+    )
