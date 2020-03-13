@@ -31,7 +31,7 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
 import HomeScreen from './containers/HomeScreen';
-import ProfileScreen from './containers/ProfileScreen';
+import ProfileScreen from './containers/TinProfileScreen';
 import MessengerScreen from './containers/MessengerScreen';
 import CardStack, {Card} from 'react-native-card-stack-swiper';
 
