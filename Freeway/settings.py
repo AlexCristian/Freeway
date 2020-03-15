@@ -46,13 +46,23 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SAMESITE = None
+
+CORS_ORIGIN_WHITELIST = (
+        'http://192.168.86.200:19006',
+)
+
+CSRF_TRUSTED_ORIGINS = [
+        'http://192.168.86.200:19006'
+]
 
 ROOT_URLCONF = 'Freeway.urls'
 
