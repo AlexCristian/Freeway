@@ -173,6 +173,10 @@ def profile(request):
     response = {}
     response["bio"] = user.bio
     response["location"] = user.location
+    response["email"] = user.email
+    response["name"] = user.name
+    response["photourl"] = user.photourl
+    response["datecreated"] = str(user.datecreated)
 
     return HttpResponse(
         json.dumps(response),
