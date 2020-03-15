@@ -95,8 +95,26 @@ class ConversationsTests(TestCase):
                                         reverse('api:conversations'))
         self.assertEqual(response.status_code, 200)
 
-        self.assertEqual(response.content.decode('utf-8'),
-                         '[{"role": "PiN", "partnerid": "' + self.u2_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "Test2.", "archived": false}, {"role": "Volunteer", "partnerid": "' + self.u3_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "Test4.", "archived": false}]')
+        res_json = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(len(res_json), 2)
+
+        convo = Conversation.objects.get(volunteerid=self.u2_id)
+        self.assertEqual(res_json[0]["id"], str(convo.id))
+        self.assertEqual(res_json[0]["role"], "PiN")
+        self.assertEqual(res_json[0]["partnerid"], self.u2_id)
+        self.assertEqual(res_json[0]["name"], "Jon Doe")
+        self.assertEqual(res_json[0]["photourl"], "https://google.com/test.png")
+        self.assertEqual(res_json[0]["lastmsg"], "Test2.")
+        self.assertEqual(res_json[0]["archived"], False)
+
+        convo = Conversation.objects.get(pinid=self.u3_id)
+        self.assertEqual(res_json[1]["id"], str(convo.id))
+        self.assertEqual(res_json[1]["role"], "Volunteer")
+        self.assertEqual(res_json[1]["partnerid"], self.u3_id)
+        self.assertEqual(res_json[1]["name"], "Jon Doe")
+        self.assertEqual(res_json[1]["photourl"], "https://google.com/test.png")
+        self.assertEqual(res_json[1]["lastmsg"], "Test4.")
+        self.assertEqual(res_json[1]["archived"], False)
         self.assertEqual(response['content-type'], 'application/json')
 
     def test_conversations_no_message(self):
@@ -115,8 +133,27 @@ class ConversationsTests(TestCase):
         response = self.client.generic('GET',
                                         reverse('api:conversations'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode('utf-8'),
-                         '[{"role": "PiN", "partnerid": "' + self.u2_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "", "archived": false}, {"role": "Volunteer", "partnerid": "' + self.u3_id + '", "name": "Jon Doe", "photourl": "https://google.com/test.png", "lastmsg": "", "archived": false}]')
+
+        res_json = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(len(res_json), 2)
+
+        convo = Conversation.objects.get(volunteerid=self.u2_id)
+        self.assertEqual(res_json[0]["id"], str(convo.id))
+        self.assertEqual(res_json[0]["role"], "PiN")
+        self.assertEqual(res_json[0]["partnerid"], self.u2_id)
+        self.assertEqual(res_json[0]["name"], "Jon Doe")
+        self.assertEqual(res_json[0]["photourl"], "https://google.com/test.png")
+        self.assertEqual(res_json[0]["lastmsg"], "")
+        self.assertEqual(res_json[0]["archived"], False)
+
+        convo = Conversation.objects.get(pinid=self.u3_id)
+        self.assertEqual(res_json[1]["id"], str(convo.id))
+        self.assertEqual(res_json[1]["role"], "Volunteer")
+        self.assertEqual(res_json[1]["partnerid"], self.u3_id)
+        self.assertEqual(res_json[1]["name"], "Jon Doe")
+        self.assertEqual(res_json[1]["photourl"], "https://google.com/test.png")
+        self.assertEqual(res_json[1]["lastmsg"], "")
+        self.assertEqual(res_json[1]["archived"], False)
         self.assertEqual(response['content-type'], 'application/json')
 
 class ArchiveConversationTests(TestCase):

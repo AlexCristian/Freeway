@@ -39,13 +39,15 @@ def post_task(request):
     except (ObjectDoesNotExist, KeyError):
         return HttpResponse("Unauthorized", status=401)
     try:
-        Task.objects.create(
+        task = Task.objects.create(
             description=json_req["description"],
             description_embedding=embedding,
             pinid=user.id,
             volunteerid=user.id,  # May not be the best choice but can't leave it null
             state=Task.POSTED,
         )
+        response = {}
+        response["id"] = str(task.id)
     except ValidationError:
         return HttpResponse(
             "Invalid task data",
@@ -53,8 +55,9 @@ def post_task(request):
         )
     else:
         return HttpResponse(
-            "New task added to DB",
-            status=200
+            json.dumps(response),
+            status=200,
+            content_type='application/json'
         )
 
 # URI: /api/task/:task_id:

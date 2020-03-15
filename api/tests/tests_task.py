@@ -39,6 +39,9 @@ class TaskTests(TestCase):
                             }),
                             content_type='application/json')
         self.assertEqual(res.status_code, 200)
+        task = Task.objects.get(description="This is a test task")
+        res_json = json.loads(res.content.decode('utf-8'))
+        self.assertEqual(res_json['id'], str(task.id))
 
     def test_get_task(self):
         res = self.client.generic('POST',

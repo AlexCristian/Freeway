@@ -48,6 +48,7 @@ def conversations(request):
         lastmsg = fetch_last_message(convo.id)
 
         item = {}
+        item["id"] = str(convo.id)
         item["role"] = "PiN"
         item["partnerid"] = partnerid
         item["name"] = partner.name
@@ -62,6 +63,7 @@ def conversations(request):
         lastmsg = fetch_last_message(convo.id)
 
         item = {}
+        item["id"] = str(convo.id)
         item["role"] = "Volunteer"
         item["partnerid"] = partnerid
         item["name"] = partner.name
