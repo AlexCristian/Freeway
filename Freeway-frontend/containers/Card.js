@@ -9,7 +9,16 @@ import {
 } from 'react-native';
 import styles from '../assets/styles/styles.js';
 
-const CardItem = ({actions, bio, image, name, location, variant}) => {
+const CardItem = ({
+  actions,
+  bio,
+  image,
+  name,
+  location,
+  onPressLeft,
+  onPressRight,
+  variant,
+}) => {
   const fullWidth = Dimensions.get('window').width;
   const imageStyle = [
     {
@@ -41,12 +50,14 @@ const CardItem = ({actions, bio, image, name, location, variant}) => {
 
       {actions && (
         <View style={styles.actionsCardItem}>
-          <TouchableOpacity style={styles.button}>
-            <Button title="Dislike"></Button>
+          <TouchableOpacity style={styles.button} onPress={() => onPressLeft()}>
+            <Text>No</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button}>
-            <Button title="Like"></Button>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => onPressRight()}>
+            <Text>Yes</Text>
           </TouchableOpacity>
         </View>
       )}
