@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": null,
-  "packagerPid": null,
+  "packagerPort": 19001,
+  "packagerPid": 4552,
   "expoServerNgrokUrl": "https://gm-jd2.anonymous.freeway.exp.direct",
   "packagerNgrokUrl": "https://packager.gm-jd2.anonymous.freeway.exp.direct",
-  "ngrokPid": 7284,
+  "ngrokPid": 1040,
   "webpackServerPort": 19006
 }

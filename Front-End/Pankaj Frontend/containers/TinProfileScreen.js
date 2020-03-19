@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, Text, View, ScrollView, TouchableOpacity, ActivityIndicator, TextInput} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, ActivityIndicator, FlatList} from 'react-native';
 import {Image} from 'react-native' ; 
 import 'react-native-gesture-handler';
 
@@ -12,9 +12,6 @@ export default class ProfileScreen extends React.Component {
       this.state = {
         isLoading: true,
         dataSource: null,
-        newEmail: '',
-        newLoc: '',
-
       }
     }
   
@@ -40,7 +37,6 @@ export default class ProfileScreen extends React.Component {
     }
     
     render() {
-      
   
       if (this.state.isLoading) {
         return (
@@ -52,53 +48,39 @@ export default class ProfileScreen extends React.Component {
       else {
         var bio = this.state.dataSource.bio;
         var location = this.state.dataSource.location;
-        var email = this.state.dataSource.email;
-        var name = this.state.dataSource.name;
-        var photourl = this.state.dataSource.photourl
-
         return(
           <ScrollView contentContainerStyle ={styles.scrollView} style={{flex:1}} >
           <Text style = {{paddingTop: '2%', paddingLeft: '5%', fontSize: 30}}>User Profile</Text>
           <Image
               style={{width: 300, height: 300, alignSelf: 'center', justifyContent: 'center'}}
-              source={{uri: photourl}}
+              source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
             />
     
-          <Text style = {{paddingTop: '2%', paddingLeft: '5%', paddingRight: '5%', fontSize: 25}}>{name}</Text>
+          <Text style = {{paddingTop: '2%', paddingLeft: '5%', paddingRight: '5%', fontSize: 25}}>Name</Text>
           
-          <Text style = {{paddingTop: '2%', paddingLeft: '5%', paddingRight: '5%', paddingBottom: '5%', fontSize: 25}}>{bio}</Text> 
+          <Text style = {{paddingTop: '2%', paddingLeft: '5%', paddingRight: '5%', fontSize: 25}}>{bio}</Text> 
     
     
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', }}>
-            <Text style = {{paddingLeft: '5%', fontSize: 13}}>Email</Text>
-            <TextInput style={{paddingLeft: '5%', paddingRight: '5%', height: 40, fontSize: 13}} placeholder={email} onChangeText={(newEmail) => this.setState({newEmail})} value={this.state.newEmail}/>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow:1}}>
+            <Text style = {{paddingTop: '5%', paddingLeft: '5%', paddingRight: '5%', fontSize: 13}}>Email</Text>
+            <Text style = {{paddingTop: '5%', paddingLeft: '5%', paddingRight: '5%', fontSize: 13}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </Text>
           </View>
-
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', }}>
-            <Text style = {{paddingLeft: '5%', fontSize: 13}}>City:</Text>
-            <TextInput style={{paddingLeft: '5%', paddingRight: '5%', height: 40, fontSize: 13}} placeholder={location} onChangeText={(newLoc) => this.setState({newLoc})} value={this.state.newLoc}/>
+    
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow:1}}>
+            <Text style = {{paddingTop: '3%', paddingLeft: '5%', paddingRight: '5%', fontSize: 13}}>Nickname:</Text>
+            <Text style = {{paddingTop: '3%', paddingLeft: '5%', paddingRight: '5%', fontSize: 13}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </Text>
+          </View>
+    
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow:1}}>
+            <Text style = {{paddingTop: '2%', paddingLeft: '5%', paddingRight: '5%', fontSize: 13}}>City:</Text>
+            <Text style = {{paddingTop: '2%', paddingLeft: '5%', paddingRight: '5%', fontSize: 13}}>{location} </Text> 
           </View>
           
-
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', flexGrow:1, margin: 20, padding: 10}}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('NewTask')} style={styles.backButton} >
-              <Text >
-                  Create Task
-              </Text>
-            </TouchableOpacity >
-
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={styles.backButton} >
-              <Text >
-                  Logout
-              </Text>
-            </TouchableOpacity >
-            
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('FAQ')} style={styles.backButton} >
-              <Text >
-                  Help?
-              </Text>
-            </TouchableOpacity >
-          </View>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('FAQ')} style={styles.backButton} >
+            <Text >
+                Help?
+            </Text>
+          </TouchableOpacity >
     
         </ScrollView>
         )

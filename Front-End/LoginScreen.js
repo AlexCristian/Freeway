@@ -22,7 +22,7 @@ export default class LoginScreen extends React.Component {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        var raw = JSON.stringify({"email":"test@test.com","oauthid":"123456"});
+        var raw = JSON.stringify({"email":"a@gmail.com","oauthid":"123456"});
 
         var requestOptions = {
             method: 'POST',
