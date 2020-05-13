@@ -4,7 +4,6 @@ from django.core.validators import ValidationError
 from django.http import HttpResponse
 from api.models import Conversation, Message, User
 from api.common import *
-from api.conversations import new_conversation
 import bcrypt
 
 # Message-related endpoints reside here.
