@@ -4,6 +4,7 @@ from django.core.validators import ValidationError
 from django.http import HttpResponse
 from api.models import Conversation, Message, User
 from api.common import *
+from api.conversations import new_conversation
 import bcrypt
 
 # Message-related endpoints reside here.
@@ -20,13 +21,8 @@ def createconversation(request):
 
 
     try:
-        Conversation.objects.create(
-            pinid=json_req["pinid"],
-            volunteerid=json_req["volunteerid"],
-            taskid=json_req["taskid"],
-            archived=False,
-        )
-    except ValidationError(e):
+        new_conversation(json_req["pinid"], json_req["volunteerid"], json_req["taskid"])
+    except UnexpectedContentException(e):
         return HttpResponse(
             "Invalid conversation data",
             status=400

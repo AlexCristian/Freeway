@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import ValidationError
 from django.http import HttpResponse
 from api.models import Conversation, Message
 from api.common import *
@@ -11,6 +12,23 @@ def fetch_last_message(convo_id):
     if result == None:
         return ""
     return result.content
+
+# Helper method. Creates a new conversation with the given parameters.
+def new_conversation(pinid, volunteerid, taskid):
+    convo = None
+    try:
+        convo = Conversation.objects.create(
+            pinid=pinid,
+            volunteerid=volunteerid,
+            taskid=taskid,
+            archived=False,
+        )
+    except ValidationError(e):
+        raise UnexpectedContentException
+
+    if convo is None:
+        raise UnexpectedContentException
+    return convo
 
 # URI: /api/conversations
 # Expect:
