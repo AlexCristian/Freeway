@@ -62,7 +62,7 @@ def volunteer_swipe(request, taskid, pinid, match):
             matched=match,
         )
 
-        if match == True: # This means both parties swiped right.
+        if match: # This means both parties swiped right.
             new_conversation(pinid, volunteerid, taskid)
             return HttpResponse(
                 "Match detected",

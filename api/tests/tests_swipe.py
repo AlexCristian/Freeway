@@ -92,7 +92,7 @@ class PinSwipeTests(TestCase):
                             content_type='application/json')
 
         response = self.client.generic('GET',
-                        "/api/conversations",
+                        reverse('api:conversations'),
                         content_type='application/json')
         
         convos = json.loads(response.content.decode('utf-8'))
@@ -105,7 +105,7 @@ class PinSwipeTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         response = self.client.generic('GET',
-                        "/api/conversations",
+                        reverse('api:conversations'),
                         content_type='application/json')
         
         convos = json.loads(response.content.decode('utf-8'))
