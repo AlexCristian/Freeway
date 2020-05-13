@@ -92,10 +92,24 @@ class PinSwipeTests(TestCase):
                             content_type='application/json')
 
         response = self.client.generic('GET',
+                        reverse('api:conversations'),
+                        content_type='application/json')
+        
+        convos = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(len(convos), 0)
+
+        response = self.client.generic('GET',
                         f"/api/swipe/v/{self.taskid}/{self.userid1}/{True}",
                         content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
+
+        response = self.client.generic('GET',
+                        reverse('api:conversations'),
+                        content_type='application/json')
+        
+        convos = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(len(convos), 1)
 
     def test_wrong_pinid_swipe(self):
         response = self.client.generic('GET',

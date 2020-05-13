@@ -74,9 +74,7 @@ def volunteer_feed(request):
     swiped = Swipe.objects.filter(swipedid=volunteerid)
 
     try:
-        swiper = Swipe.objects.get(swiperid=volunteerid)
-        if type(swiper) != type([]):
-            swiper = [swiper]
+        swiper = Swipe.objects.filter(swiperid=volunteerid)
     except (ObjectDoesNotExist, KeyError):
         swiper = []
 

@@ -25,12 +25,13 @@ SECRET_KEY = 's!a6gqsjvhb96_g&$sy!y!7=(e%6$*l8)70ouk3rc1^s!wkimj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 'freeway.eastus.cloudapp.azure.com' ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,13 +42,26 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SAMESITE = None
+
+CORS_ORIGIN_WHITELIST = (
+        'http://192.168.86.200:19006',
+)
+
+CSRF_TRUSTED_ORIGINS = [
+        'http://192.168.86.200:19006'
 ]
 
 ROOT_URLCONF = 'Freeway.urls'

@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import ValidationError
 from api.models import Conversation, Message, Swipe, Task, User
 import json
 
@@ -65,3 +66,20 @@ def check_messageid(id):
     except (ObjectDoesNotExist, KeyError):
         return False
     return True
+
+# Helper method. Creates a new conversation with the given parameters.
+def new_conversation(pinid, volunteerid, taskid):
+    convo = None
+    try:
+        convo = Conversation.objects.create(
+            pinid=pinid,
+            volunteerid=volunteerid,
+            taskid=taskid,
+            archived=False,
+        )
+    except ValidationError(e):
+        raise UnexpectedContentException
+
+    if convo is None:
+        raise UnexpectedContentException
+    return convo

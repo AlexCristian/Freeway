@@ -20,13 +20,8 @@ def createconversation(request):
 
 
     try:
-        Conversation.objects.create(
-            pinid=json_req["pinid"],
-            volunteerid=json_req["volunteerid"],
-            taskid=json_req["taskid"],
-            archived=False,
-        )
-    except ValidationError(e):
+        new_conversation(json_req["pinid"], json_req["volunteerid"], json_req["taskid"])
+    except UnexpectedContentException(e):
         return HttpResponse(
             "Invalid conversation data",
             status=400

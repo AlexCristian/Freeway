@@ -280,10 +280,18 @@ class ProfileTests(TestCase):
                             }),
                             content_type='application/json')
         response = self.client.generic('GET', reverse('api:profile'))
-        self.assertEqual(response.content.decode('utf-8'),
-                         '{"bio": "Hello.", "location": "Madrid"}')
         self.assertEqual(response['content-type'], 'application/json')
         self.assertEqual(response.status_code, 200)
+
+        user = User.objects.get(email="jon@example.com")
+
+        res_json = json.loads(response.content.decode('utf-8'))
+        self.assertEqual(res_json["bio"], user.bio)
+        self.assertEqual(res_json["location"], user.location)
+        self.assertEqual(res_json["email"], user.email)
+        self.assertEqual(res_json["name"], user.name)
+        self.assertEqual(res_json["photourl"], user.photourl)
+        self.assertEqual(res_json["datecreated"], str(user.datecreated))
 
     def test_profile_no_login(self):
         response = self.client.generic('GET', reverse('api:profile'))
