@@ -51,7 +51,7 @@ def volunteer_swipe(request, taskid, pinid, match):
     if not check_userid(pinid):
         return httpBadRequest()
 
-    if not check_swipe(pinid, volunteerid):
+    if not check_swipe(pinid, volunteerid, taskid):
         return HttpResponse("Pin didn't swipe! Most likely an error from front-end side", status=401)
 
     try:

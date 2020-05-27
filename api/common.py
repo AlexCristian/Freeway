@@ -46,9 +46,9 @@ def check_userid(id):
         return False
     return True
 
-def check_swipe(swiperid, swipedid):
+def check_swipe(swiperid, swipedid, taskid):
     try:
-        swipe = Swipe.objects.get(swiperid=swiperid, swipedid=swipedid)
+        swipe = Swipe.objects.get(swiperid=swiperid, swipedid=swipedid, taskid=taskid)
     except (ObjectDoesNotExist, KeyError):
         return False
     return True
