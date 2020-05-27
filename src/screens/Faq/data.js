@@ -1,48 +1,33 @@
 const data = [
   {
-    question: "What is Lorem Ipsum?",
+    question: "What is this app?",
     answer:
-      "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "The purpose of this app is to provide people that want to volunteer and people that need to volunteer a means to connect and comminucate with one another.",
   },
   {
     question: "Where does it come from?",
     answer:
-      "long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "This app was created as part a capstone project required by Drexel for it's students in the College of Computing and Informatics.",
   },
   {
-    question: "Why do we use it?",
+    question: "How do I use the app if I need volunteers?",
     answer:
-      "fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "Navigate to the tab where you can create a task and click on the create new task button. Once clicked, enter in information regarding your task amd click Search. Profiles will then be shown, and you are able to swipe left or click the button on the left to reject the attempt to connect, or swipe right or click on the heart to attempt to connect. CLicking on the profile pulls up information about the user displayed.",
   },
   {
-    question: "Where can I get some?",
+    question: "How do I use the app if I need want to volunteer?",
     answer:
-      "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "Navigate to the tab where you can see profiles for other users without having to make a task, it should be next to the tab mentioned previously. Here, you can swipe left or click the button on the left to reject the attempt to connect, or swipe right or click on the heart to attempt to connect. CLicking on the profile pulls up information about the user displayed.",
   },
   {
-    question: "What is Lorem Ipsum?",
+    question: "The screens don't show anything?",
     answer:
-      "a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "Either you need to create a task first or there are no people that need help in the area.",
   },
   {
-    question: "Where does it come from?",
+    question: "I've encountered a problem not mentioned here.",
     answer:
-      "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-  },
-  {
-    question: "Where does it come from?",
-    answer:
-      "long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-  },
-  {
-    question: "Why do we use it?",
-    answer:
-      "fact that a reader will be distracted by the readable content of a page when looking at its layout.",
-  },
-  {
-    question: "Where can I get some?",
-    answer:
-      "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+      "Please send an email to ProjFreeway@gmail.com and we will get back to you as soon as possible!",
   },
 ];
 
