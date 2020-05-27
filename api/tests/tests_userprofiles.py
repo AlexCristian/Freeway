@@ -22,7 +22,7 @@ class SigninTests(TestCase):
 
     def test_signin(self):
         response = self.client.generic('GET',
-                                        reverse('api:login'),
+                                        reverse('api:login-legacy'),
                                         json.dumps(
                                         {
                                             "email": "d@t.com",
@@ -33,7 +33,7 @@ class SigninTests(TestCase):
 
     def test_signin_no_such_user(self):
         response = self.client.generic('GET',
-                                        reverse('api:login'),
+                                        reverse('api:login-legacy'),
                                         json.dumps(
                                         {
                                             "email": "john@yahoo.us",
@@ -44,7 +44,7 @@ class SigninTests(TestCase):
 
     def test_signin_wrong_pwd(self):
         response = self.client.generic('GET',
-                                        reverse('api:login'),
+                                        reverse('api:login-legacy'),
                                         json.dumps(
                                         {
                                             "email": "d@t.com",
@@ -55,7 +55,7 @@ class SigninTests(TestCase):
 
     def test_signin_malformed_json(self):
         response = self.client.generic('GET',
-                                        reverse('api:login'),
+                                        reverse('api:login-legacy'),
                                         json.dumps(
                                         {
                                             "thing": "d@t.com",
@@ -80,7 +80,7 @@ class LogoutTests(TestCase):
 
     def test_logout(self):
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "d@t.com",
@@ -180,7 +180,7 @@ class SetBioTests(TestCase):
                         }),
                         content_type='application/json')
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "jon@example.com",
@@ -225,7 +225,7 @@ class SetLocationTests(TestCase):
                         }),
                         content_type='application/json')
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "jon@example.com",
@@ -272,7 +272,7 @@ class ProfileTests(TestCase):
     
     def test_profile(self):
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "jon@example.com",

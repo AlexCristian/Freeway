@@ -35,7 +35,7 @@ class PinSwipeTests(TestCase):
                         content_type='application/json')
 
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "u1@t.com",
@@ -83,7 +83,7 @@ class PinSwipeTests(TestCase):
 
         self.client.generic('GET', reverse('api:logout'))
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "u2@t.com",

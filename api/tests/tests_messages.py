@@ -22,7 +22,7 @@ class PostMessageTests(TestCase):
                         content_type='application/json')
 
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "jon@example.com",
@@ -83,7 +83,7 @@ class GetMessagesTests(TestCase):
                         content_type='application/json')
 
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "jon@example.com",

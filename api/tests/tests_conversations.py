@@ -74,7 +74,7 @@ class ConversationsTests(TestCase):
 
     def test_conversations(self):
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "u1@t.com",
@@ -119,7 +119,7 @@ class ConversationsTests(TestCase):
 
     def test_conversations_no_message(self):
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "u1@t.com",
@@ -176,7 +176,7 @@ class ArchiveConversationTests(TestCase):
 
     def test_archive(self):
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "u1@t.com",
@@ -189,7 +189,7 @@ class ArchiveConversationTests(TestCase):
 
     def test_archive_badid(self):
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "u1@t.com",

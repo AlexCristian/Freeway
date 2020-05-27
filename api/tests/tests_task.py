@@ -22,7 +22,7 @@ class TaskTests(TestCase):
                         content_type='application/json')
 
         self.client.generic('GET',
-                            reverse('api:login'),
+                            reverse('api:login-legacy'),
                             json.dumps(
                             {
                                 "email": "jon@example.com",

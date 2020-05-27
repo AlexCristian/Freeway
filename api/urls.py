@@ -6,6 +6,7 @@ app_name = "api"
 urlpatterns = [
     path('', views.index, name='index'),
     path('login', userprofiles.login, name='login'),
+    path('login-legacy', userprofiles.login_legacy, name='login-legacy'),
     path('logout', userprofiles.logout, name='logout'),
     path('signup', userprofiles.signup, name='signup'),
     path('setbio', userprofiles.setbio, name='setbio'),
