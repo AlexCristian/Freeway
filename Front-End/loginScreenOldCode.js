@@ -22,11 +22,6 @@ componentDidMount(){
         .catch(error => console.log('error', error));
     
 }
-
-//setTrue = () => {
-    //this.setState({loginAttempt: true})
-//}
-
     
   
     render() {
