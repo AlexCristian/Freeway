@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import {StyleSheet, Text, View, Button, ScrollView, TouchableOpacity, ActivityIndicator, FlatList} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {Input} from 'react-native-elements';
-import {Image} from 'react-native' ; 
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator, createAppContainer} from '@react-navigation/stack';

@@ -1,4 +1,4 @@
-import shortid from 'shortid';
+import { nanoid } from 'nanoid/non-secure';
 import BaseRouter from './BaseRouter';
 import {
   NavigationState,
@@ -6,6 +6,7 @@ import {
   Router,
   DefaultRouterOptions,
   Route,
+  ParamListBase,
 } from './types';
 
 export type StackActionType =
@@ -42,6 +43,42 @@ export type StackNavigationState = NavigationState & {
   type: 'stack';
 };
 
+export type StackActionHelpers<ParamList extends ParamListBase> = {
+  /**
+   * Replace the current route with a new one.
+   *
+   * @param name Route name of the new route.
+   * @param [params] Params object for the new route.
+   */
+  replace<RouteName extends keyof ParamList>(
+    ...args: ParamList[RouteName] extends undefined
+      ? [RouteName] | [RouteName, ParamList[RouteName]]
+      : [RouteName, ParamList[RouteName]]
+  ): void;
+
+  /**
+   * Push a new screen onto the stack.
+   *
+   * @param name Name of the route for the tab.
+   * @param [params] Params object for the route.
+   */
+  push<RouteName extends keyof ParamList>(
+    ...args: ParamList[RouteName] extends undefined | any
+      ? [RouteName] | [RouteName, ParamList[RouteName]]
+      : [RouteName, ParamList[RouteName]]
+  ): void;
+
+  /**
+   * Pop a screen from the stack.
+   */
+  pop(count?: number): void;
+
+  /**
+   * Pop to the first route in the stack, dismissing all other screens.
+   */
+  popToTop(): void;
+};
+
 export const StackActions = {
   replace(name: string, params?: object): StackActionType {
     return { type: 'REPLACE', payload: { name, params } };
@@ -76,12 +113,12 @@ export default function StackRouter(options: StackRouterOptions) {
       return {
         stale: false,
         type: 'stack',
-        key: `stack-${shortid()}`,
+        key: `stack-${nanoid()}`,
         index: 0,
         routeNames,
         routes: [
           {
-            key: `${initialRouteName}-${shortid()}`,
+            key: `${initialRouteName}-${nanoid()}`,
             name: initialRouteName,
             params: routeParamList[initialRouteName],
           },
@@ -97,12 +134,12 @@ export default function StackRouter(options: StackRouterOptions) {
       }
 
       const routes = state.routes
-        .filter(route => routeNames.includes(route.name))
+        .filter((route) => routeNames.includes(route.name))
         .map(
-          route =>
+          (route) =>
             ({
               ...route,
-              key: route.key || `${route.name}-${shortid()}`,
+              key: route.key || `${route.name}-${nanoid()}`,
               params:
                 routeParamList[route.name] !== undefined
                   ? {
@@ -120,7 +157,7 @@ export default function StackRouter(options: StackRouterOptions) {
             : routeNames[0];
 
         routes.push({
-          key: `${initialRouteName}-${shortid()}`,
+          key: `${initialRouteName}-${nanoid()}`,
           name: initialRouteName,
           params: routeParamList[initialRouteName],
         });
@@ -129,7 +166,7 @@ export default function StackRouter(options: StackRouterOptions) {
       return {
         stale: false,
         type: 'stack',
-        key: `stack-${shortid()}`,
+        key: `stack-${nanoid()}`,
         index: routes.length - 1,
         routeNames,
         routes,
@@ -137,7 +174,7 @@ export default function StackRouter(options: StackRouterOptions) {
     },
 
     getStateForRouteNamesChange(state, { routeNames, routeParamList }) {
-      const routes = state.routes.filter(route =>
+      const routes = state.routes.filter((route) =>
         routeNames.includes(route.name)
       );
 
@@ -149,7 +186,7 @@ export default function StackRouter(options: StackRouterOptions) {
             : routeNames[0];
 
         routes.push({
-          key: `${initialRouteName}-${shortid()}`,
+          key: `${initialRouteName}-${nanoid()}`,
           name: initialRouteName,
           params: routeParamList[initialRouteName],
         });
@@ -164,7 +201,7 @@ export default function StackRouter(options: StackRouterOptions) {
     },
 
     getStateForRouteFocus(state, key) {
-      const index = state.routes.findIndex(r => r.key === key);
+      const index = state.routes.findIndex((r) => r.key === key);
 
       if (index === -1 || index === state.index) {
         return state;
@@ -182,9 +219,10 @@ export default function StackRouter(options: StackRouterOptions) {
 
       switch (action.type) {
         case 'REPLACE': {
-          const index = action.source
-            ? state.routes.findIndex(r => r.key === action.source)
-            : state.index;
+          const index =
+            action.target === state.key && action.source
+              ? state.routes.findIndex((r) => r.key === action.source)
+              : state.index;
 
           if (index === -1) {
             return null;
@@ -201,7 +239,7 @@ export default function StackRouter(options: StackRouterOptions) {
             routes: state.routes.map((route, i) =>
               i === index
                 ? {
-                    key: key !== undefined ? key : `${name}-${shortid()}`,
+                    key: key !== undefined ? key : `${name}-${nanoid()}`,
                     name,
                     params:
                       routeParamList[name] !== undefined
@@ -226,7 +264,7 @@ export default function StackRouter(options: StackRouterOptions) {
                 {
                   key:
                     action.payload.key === undefined
-                      ? `${action.payload.name}-${shortid()}`
+                      ? `${action.payload.name}-${nanoid()}`
                       : action.payload.key,
                   name: action.payload.name,
                   params:
@@ -246,7 +284,7 @@ export default function StackRouter(options: StackRouterOptions) {
         case 'POP': {
           const index =
             action.target === state.key && action.source
-              ? state.routes.findIndex(r => r.key === action.source)
+              ? state.routes.findIndex((r) => r.key === action.source)
               : state.index;
 
           if (index > 0) {

@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, ImageBackground, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import CardStack, {Card} from 'react-native-card-stack-swiper';
-
 import CardContent from './Cards.js';
 
 export default class SwipingScreen extends React.Component {

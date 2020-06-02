@@ -1,7 +1,6 @@
 import React from 'react';
 import {Text, View, ScrollView, TouchableOpacity, FlatList} from 'react-native';
 import styles from './assets/styles/styles.js';
-import Data from './assets/data/data.js';
 import Message from './Message.js';
 
 export default class MessengerScreen extends React.Component {

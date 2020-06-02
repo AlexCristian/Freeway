@@ -1,30 +1,22 @@
 {
   "expo": {
-    "name": "Blank Template",
-    "slug": "Freeway",
-    "privacy": "public",
-    "sdkVersion": "36.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
+   "name": "Freeway",
+   "icon": "./assets/icon.png",
+   "version": "1.0.0",
+   "slug": "Freeway",
+   "ios": {
+     "bundleIdentifier": "Senior.Proj",
+     "buildNumber": "1.0.0"
+   },
+   "android": {
+     "package": "Senior.Proj",
+     "versionCode": 1,
+     "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyBXP4N68D6DoxyNHv8FK_Nvm6KCeoVerKU",
+          "certificateHash": "E9:A7:3F:C4:DE:1E:2C:FC:99:60:FA:2F:04:BF:B0:63:05:2A:F6:34"
+        }
+      }
     }
   }
 }
