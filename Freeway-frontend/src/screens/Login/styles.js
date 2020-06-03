@@ -66,6 +66,7 @@ export default {
     borderColor: "#FFF",
   },
   loginBtn: {
+    alignItems: "center",
     width: deviceWidth - 60,
     alignSelf: "center",
     backgroundColor: "#4285F4",
@@ -83,5 +84,11 @@ export default {
     color: commonColor.lightTextColor,
     fontSize: 12,
     textAlign: "center",
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 };

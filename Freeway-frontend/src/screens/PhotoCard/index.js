@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Image, ImageBackground, View } from "react-native";
+import React, { Component, useRef } from "react";
+import { Image, ImageBackground, ActivityIndicator, Alert } from "react-native";
 import {
   Container,
   Text,
@@ -12,202 +12,299 @@ import {
   Button,
   Right,
   Body,
+  Header,
+  View,
+  Thumbnail,
+  Left,
 } from "native-base";
 import commonColor from "../../theme/variables/commonColor";
 import styles from "./styles";
 import data from "./data";
+import { NavigationActions } from "react-navigation";
+
+const navigateAction = (name, photourl, bio) =>
+  NavigationActions.navigate({
+    routeName: "PhotoCardDetails",
+    params: { name: name, photoURL: photourl, userBio: bio },
+  });
 
 class PhotoCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      direction: null,
-      opac: 0,
+      isLoading: true,
+      dataSource: null,
+      num: 1,
+      swipeResponse: null,
+      // updateFeed: false,
     };
     this._deckSwiper = null;
+    this.taskId =
+      typeof this.props.navigation.state.params != "undefined"
+        ? this.props.navigation.state.params.taskID
+        : null;
+  }
+
+  async getFeed() {
+    return await fetch(
+      "http://freeway.eastus.cloudapp.azure.com:8000/api/feed/p/" + this.taskId,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        //console.log(result);
+        this.setState({
+          isLoading: false,
+          dataSource: result,
+        });
+      })
+      .catch((error) => {
+        console.log("error", error);
+        this.setState({ isLoading: false });
+      });
+  }
+
+  async componentDidMount() {
+    console.log("In componentDidMount");
+    await this.getFeed();
+    // return await fetch(
+    //   "http://freeway.eastus.cloudapp.azure.com:8000/api/feed/p/" + this.taskId,
+    //   {
+    //     method: "GET",
+    //     credentials: "include",
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // )
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     console.log(result);
+    //     this.setState({
+    //       isLoading: false,
+    //       dataSource: result,
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error);
+    //     this.setState({ isLoading: false });
+    //   });
+  }
+
+  async componentDidUpdate(prevState, prevProps) {
+    // if (this.state.updateFeed) {
+    //   console.log("In componentDidUpdate");
+    //   this.state.updateFeed = false;
+    //   await this.getFeed();
+    //   // return await fetch(
+    //   //   "http://freeway.eastus.cloudapp.azure.com:8000/api/feed/p/" +
+    //   //     this.taskId,
+    //   //   {
+    //   //     method: "GET",
+    //   //     credentials: "include",
+    //   //     headers: {
+    //   //       Accept: "application/json",
+    //   //       "Content-Type": "application/json",
+    //   //     },
+    //   //   }
+    //   // )
+    //   //   .then((response) => response.json())
+    //   //   .then((result) => {
+    //   //     this.setState({
+    //   //       isLoading: false,
+    //   //       dataSource: result,
+    //   //     });
+    //   //   })
+    //   //   .catch((error) => {
+    //   //     console.log("error", error);
+    //   //     this.setState({ isLoading: false });
+    //   //   });
+    // }
+  }
+
+  async sendSwipeInfo(volunteerId, swipeVal) {
+    console.log("In sendSwipeInfo");
+    swipeVal == "False"
+      ? this._deckSwiper._root.swipeLeft()
+      : this._deckSwiper._root.swipeRight();
+
+    return await fetch(
+      "http://freeway.eastus.cloudapp.azure.com:8000/api/swipe/p/" +
+        this.taskId +
+        "/" +
+        volunteerId +
+        "/" +
+        swipeVal,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        this.setState({
+          isLoading: false,
+          swipeResponse: result,
+        });
+      })
+      .catch((error) => {
+        console.log("error:", error);
+      });
   }
 
   render() {
     const navigation = this.props.navigation;
-    return (
-      <Container style={styles.wrapper}>
-        <View style={styles.deckswiperView}>
-          <DeckSwiper
-            activeOpacity={1}
-            dataSource={data}
-            ref={(c) => (this._deckSwiper = c)}
-            onSwiping={(dir, opa) =>
-              this.setState({ direction: dir, opac: opa })
-            }
-            renderTop={(item) => (
-              <Card activeOpacity={1} style={{ borderRadius: 10 }}>
-                <CardItem
-                  button
-                  style={styles.deckswiperImageCarditem}
-                  activeOpacity={1}
-                  cardBody
-                  onPress={() => navigation.navigate("PhotoCardDetails")}
-                >
-                  <ImageBackground style={styles.cardMain} source={item.image}>
-                    {this.state.direction === "left" && (
-                      <View
-                        style={{
-                          // opacity: -this.state.opac / 150,
-                          position: "absolute",
-                          right: 30,
-                          top: 40,
-                          borderWidth: 2,
-                          borderRadius: 5,
-                          borderColor: commonColor.brandPrimary,
-                          width: 100,
-                          height: 40,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          transform: [{ rotate: "20deg" }],
-                        }}
-                      >
-                        <Text
-                          style={{
-                            backgroundColor: "transparent",
-                            fontSize: 30,
-                            color: commonColor.brandPrimary,
-                            fontWeight: "900",
-                            textAlign: "center",
-                            lineHeight: 35,
-                          }}
-                        >
-                          NOPE
-                        </Text>
-                      </View>
-                    )}
-                    {this.state.direction === "right" && (
-                      <View
-                        style={{
-                          // opacity: this.state.opac / 150,
-                          position: "absolute",
-                          left: 30,
-                          top: 40,
-                          borderWidth: 2,
-                          borderRadius: 5,
-                          borderColor: commonColor.brandSuccess,
-                          width: 100,
-                          height: 40,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          transform: [{ rotate: "-20deg" }],
-                        }}
-                      >
-                        <Text
-                          style={{
-                            backgroundColor: "transparent",
-                            fontSize: 30,
-                            color: commonColor.brandSuccess,
-                            fontWeight: "900",
-                            textAlign: "center",
-                            lineHeight: 35,
-                          }}
-                        >
-                          Like
-                        </Text>
-                      </View>
-                    )}
-                  </ImageBackground>
-                </CardItem>
-                <CardItem
-                  button
-                  activeOpacity={1}
-                  style={styles.deckswiperDetailsCarditem}
-                >
-                  <Body>
-                    <Text style={styles.text}>
-                      {item.name}, {item.profession}
-                    </Text>
-                    <Text style={styles.subtextLeft}>{item.city}</Text>
-                  </Body>
-                  <Right>
-                    <Button transparent>
-                      <Icon name="md-star" style={styles.iconRight} />
-                      <Text style={styles.subtextRight}>{item.rating}</Text>
-                    </Button>
-                  </Right>
-                </CardItem>
-              </Card>
-            )}
-            renderBottom={(item) => (
-              <Card style={{ borderRadius: 10 }}>
-                <CardItem
-                  style={{
-                    borderTopLeftRadius: 10,
-                    overflow: "hidden",
-                    borderTopRightRadius: 10,
-                  }}
-                  cardBody
-                >
-                  <Image style={styles.cardMain} source={item.image} />
-                </CardItem>
-                <CardItem
-                  style={{
-                    borderBottomLeftRadius: 10,
-                    borderBottomRightRadius: 10,
-                  }}
-                >
-                  <Body>
-                    <Text style={styles.text}>
-                      {item.name}, {item.profession}
-                    </Text>
-                    <Text style={styles.subtextLeft}>{item.city}</Text>
-                  </Body>
-                  <Right>
-                    <Button
-                      transparent
-                      textStyle={{ color: "#797979", fontWeight: "900" }}
-                    >
-                      <Icon
-                        name="md-star"
-                        style={{ color: "#797979", paddingRight: 4 }}
-                      />
-                      <Text style={styles.text}>{item.rating}</Text>
-                    </Button>
-                  </Right>
-                </CardItem>
-              </Card>
-            )}
-          />
+    console.log("=============RENDER=================", this.state.num++);
+    this.taskId =
+      typeof this.props.navigation.state.params != "undefined"
+        ? this.props.navigation.state.params.taskID
+        : null;
+    if (this.state.isLoading) {
+      return (
+        <View>
+          <ActivityIndicator />
         </View>
-        <Grid style={styles.bottomGrid}>
-          <Row style={styles.bottomRowStyle}>
-            <Button
-              style={styles.bottomRoundedPills}
-              onPress={() => this._deckSwiper._root.swipeLeft()}
-            >
-              <Icon
-                name="md-close"
-                style={{
-                  color: commonColor.brandDanger,
-                  fontSize: 40,
-                  lineHeight: 40,
-                }}
+      );
+    } else {
+      // this.state.dataSource
+      //   ? console.log(this.state.dataSource[0])
+      //   : console.log("no task found");
+      if (this.state.dataSource) {
+        return (
+          <Container>
+            <Header />
+            <View style={styles.deckswiperView}>
+              <DeckSwiper
+                ref={(c) => (this._deckSwiper = c)}
+                dataSource={this.state.dataSource}
+                looping={false}
+                renderEmpty={() => (
+                  <View style={{ align: "center" }}>
+                    <Text>
+                      No cards to display. Click start new search to look for
+                      volunteers
+                    </Text>
+                  </View>
+                )}
+                renderItem={(item) => (
+                  <Card style={{ elevation: 3 }}>
+                    <CardItem>
+                      <Left>
+                        <Thumbnail source={{ uri: item.photourl }} />
+                        <Body>
+                          <Text>{item.name}</Text>
+                        </Body>
+                      </Left>
+                    </CardItem>
+                    <CardItem
+                      cardBody
+                      button
+                      style={styles.deckswiperImageCarditem}
+                      activeOpacity={1}
+                      cardBody
+                      onPress={() =>
+                        navigation.dispatch(
+                          navigateAction(item.name, item.photourl, item.bio)
+                        )
+                      }
+                    >
+                      <Image
+                        style={{ height: 300, flex: 1 }}
+                        source={{ uri: item.photourl }}
+                      />
+                    </CardItem>
+                    <CardItem>
+                      <Body>
+                        <Button
+                          style={styles.bottomRoundedPills}
+                          onPress={() => this.sendSwipeInfo(item.id, "False")}
+                        >
+                          <Icon
+                            name="md-close"
+                            style={{
+                              color: commonColor.brandDanger,
+                              fontSize: 40,
+                              lineHeight: 40,
+                            }}
+                          />
+                        </Button>
+                      </Body>
+                      <Right>
+                        <Button
+                          style={styles.bottomRoundedPills}
+                          onPress={() => this.sendSwipeInfo(item.id, "True")}
+                        >
+                          <Icon
+                            name="md-heart"
+                            style={{
+                              color: commonColor.brandSuccess,
+                              fontSize: 35,
+                              lineHeight: 40,
+                              marginLeft: 2,
+                              marginRight: 2,
+                            }}
+                          />
+                        </Button>
+                      </Right>
+                    </CardItem>
+                  </Card>
+                )}
               />
-            </Button>
-            <Button
-              style={styles.bottomRoundedPills}
-              onPress={() => this._deckSwiper._root.swipeRight()}
-            >
-              <Icon
-                name="md-heart"
-                style={{
-                  color: commonColor.brandSuccess,
-                  fontSize: 35,
-                  lineHeight: 40,
-                  marginLeft: 2,
-                  marginRight: 2,
+            </View>
+            <View style={styles.goingOutView}>
+              <Button
+                block
+                rounded
+                style={styles.logoutBtn}
+                onPress={() => {
+                  // this.state.updateFeed = true;
+                  navigation.replace("NewSearch");
                 }}
-              />
-            </Button>
-          </Row>
-        </Grid>
-      </Container>
-    );
+              >
+                <Text style={styles.logoutBtnText}>Start new search</Text>
+              </Button>
+            </View>
+          </Container>
+        );
+      } else {
+        return (
+          <Container>
+            <Header />
+            <View style={styles.deckswiperView}>
+              <Text>
+                No cards to display. Click start new search to look for
+                volunteers
+              </Text>
+            </View>
+            <View style={styles.goingOutView}>
+              <Button
+                block
+                rounded
+                style={styles.logoutBtn}
+                onPress={() => {
+                  // this.state.updateFeed = true;
+                  navigation.replace("NewSearch");
+                }}
+              >
+                <Text style={styles.logoutBtnText}>Start new search</Text>
+              </Button>
+            </View>
+          </Container>
+        );
+      }
+    }
   }
 }
 

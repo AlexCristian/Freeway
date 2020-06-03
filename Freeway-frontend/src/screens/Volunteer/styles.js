@@ -7,17 +7,17 @@ export default {
   wrapper: {
     flex: 1,
     backgroundColor: "#FFF",
-    marginTop: 1,
+    marginTop: 1
   },
   deckswiperView: {
     marginHorizontal: 15,
     marginTop: 15,
-    flex: 1,
+    flex: 1
   },
   deckswiperImageCarditem: {
     borderTopLeftRadius: 10,
     overflow: "hidden",
-    borderTopRightRadius: 10,
+    borderTopRightRadius: 10
   },
   cardMain: {
     height:
@@ -29,58 +29,48 @@ export default {
         ? height / 1.6
         : height / 1.7,
     flex: 1,
-    width: null,
+    width: null
   },
   deckswiperDetailsCarditem: {
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     paddingTop: Platform.OS === "ios" ? 15 : 10,
-    paddingBottom: 5,
+    paddingBottom: 5
   },
   text: {
     fontSize: 16,
     color: "#393E40",
     fontWeight: "600",
     opacity: 0.879,
-    fontFamily: "arial",
+    fontFamily: "arial"
   },
   subtextLeft: {
     fontSize: 12,
     color: commonColor.contentTextColor,
     fontWeight: "600",
     opacity: 0.879,
-    fontFamily: "arial",
+    fontFamily: "arial"
   },
   iconRight: {
     color: Platform.OS === "ios" ? "#a3a3a3" : commonColor.contentTextColor,
-    paddingRight: 4,
+    paddingRight: 4
   },
   subtextRight: {
     color: commonColor.contentTextColor,
     fontWeight: "600",
     opacity: 0.879,
     fontFamily: "arial",
-    paddingBottom: 4,
+    paddingBottom: 4
   },
   bottomGrid: {
     position: "absolute",
     bottom: height / 40,
     left: 0,
-    right: 0,
-  },
-  logoutBtn: {
-    width: width / 1.8,
-    alignSelf: "center",
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  logoutBtnText: {
-    fontSize: 15,
-    fontWeight: "600",
+    right: 0
   },
   bottomRowStyle: {
     marginTop: Platform.OS === "android" ? 5 : 10,
-    justifyContent: "space-around",
+    justifyContent: "space-around"
   },
   bottomRoundedSmallPills: {
     borderRadius: 25,
@@ -100,8 +90,8 @@ export default {
     borderWidth: Platform.OS === "ios" ? undefined : 0.2,
     shadowOffset: {
       height: 2,
-      width: 1,
-    },
+      width: 1
+    }
   },
   bottomRoundedPills: {
     borderRadius: 33,
@@ -117,7 +107,7 @@ export default {
     borderWidth: Platform.OS === "ios" ? undefined : 0.2,
     shadowOffset: {
       height: 2,
-      width: 1,
-    },
-  },
+      width: 1
+    }
+  }
 };

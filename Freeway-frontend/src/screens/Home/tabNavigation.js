@@ -6,11 +6,13 @@ import Profile from "../Profile";
 import PhotoCard from "../PhotoCard";
 import ChatList from "../ChatList";
 import styles from "./styles";
+import Volunteer from "../Volunteer";
 
 const HomeTabNavigation = createMaterialTopTabNavigator(
   {
     Profile: { screen: Profile },
     PhotoCard: { screen: PhotoCard },
+    Volunteer: { screen: Volunteer },
     Chat: { screen: ChatList },
   },
   {
@@ -45,11 +47,22 @@ const HomeTabNavigation = createMaterialTopTabNavigator(
                 />
               </Button>
 
+              <Button onPress={() => props.navigation.navigate("Volunteer")}>
+                <Icon
+                  name="md-hand"
+                  style={
+                    props.navigation.state.index === 2
+                      ? styles.activeIcon
+                      : styles.inActiveIcon
+                  }
+                />
+              </Button>
+
               <Button onPress={() => props.navigation.navigate("Chat")}>
                 <Icon
                   name="md-chatboxes"
                   style={
-                    props.navigation.state.index === 2
+                    props.navigation.state.index === 3
                       ? styles.activeIcon
                       : styles.inActiveIcon
                   }
