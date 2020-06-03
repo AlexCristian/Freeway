@@ -1,4 +1,42 @@
 {
-  "name": "Freeway",
-  "displayName": "Freeway"
+  "expo": {
+    "sdkVersion": "34.0.0",
+    "icon": "./assets/DefaultIcon.png",
+    "slug": "freeway",
+    "splash": {
+      "image": "./assets/launchscreen.png",
+      "resizeMode": "cover"
+    },
+    "orientation": "portrait",
+    "primaryColor": "#cccccc",
+    "packagerOpts": {
+      "assetExts": ["ttf"]
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.freeway.pr383"
+    },
+    "android": {
+      "package": "com.freeway.pr383",
+      "versionCode": 1,
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyAmY_uaR2aJ_wAS-vulk2FFmNbh5JPWJ7s",
+          "certificateHash": "23:EB:8F:CC:CB:35:D4:64:4D:A8:A3:78:9C:6B:CF:D6:4C:25:D6:55"
+        }
+      }
+    },
+    "androidStatusBarColor": "#EEE",
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#EEE"
+    },
+    "name": "Freeway",
+    "version": "9.1.0",
+    "platforms": ["android", "ios"],
+    "description": "A seamless way to connect volunteers with Person-in-Need(PiN)",
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  },
+  "displayName": "Freeway",
+  "name": "freeway"
 }
