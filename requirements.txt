@@ -1,6 +1,0 @@
-Django>=2.0,<3.0
-psycopg2>=2.7,<3.0
-bcrypt>=3.1.6,<3.1.7
-torch==1.4.0
-transformers==2.5.1
-numpy>=1.18.0,<1.19.0
